@@ -1,0 +1,24 @@
+specVersion: 1.0.0
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CTFExchange
+    network: matic
+    source:
+      address: "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E"
+      abi: CTFExchange
+      startBlock: 33605403
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Market  # Only track the Market entity
+      abis:
+        - name: CTFExchange
+          file: ./abis/CTFExchange.json
+      eventHandlers:
+        - event: TokenRegistered(indexed uint256,indexed uint256,indexed bytes32)
+          handler: handleTokenRegistered  # Only handle the TokenRegistered event
+      file: ./src/ctf-exchange.ts

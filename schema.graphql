@@ -1,0 +1,5 @@
+type Market @entity {
+  id: ID!
+  marketId: String!
+  name: String!
+}
