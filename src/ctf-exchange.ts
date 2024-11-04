@@ -1,5 +1,6 @@
 import { TokenRegistered as TokenRegisteredEvent } from "../generated/CTFExchange/CTFExchange";
 import { Market } from "../generated/schema";
+import { log } from "@graphprotocol/graph-ts";
 
 // Helper function to define human-readable names for known market IDs
 function getMarketName(marketId: string): string {
@@ -13,14 +14,20 @@ function getMarketName(marketId: string): string {
 
 // Event handler for TokenRegistered event
 export function handleTokenRegistered(event: TokenRegisteredEvent): void {
-  const marketId = event.params.token0.toString(); // Use the token ID as string for ID
+  const marketId = event.params.token0.toString(); // Make sure `token0` is the correct parameter name
+  
+  log.info("Processing TokenRegistered for market ID: {}", [marketId]);
 
   // Load or create new Market entity
   let market = Market.load(marketId);
   if (!market) {
+    log.info("Creating new Market entity with ID: {}", [marketId]);
     market = new Market(marketId);
-    market.marketId = event.params.token0;
+    market.marketId = event.params.token0; // Ensure this is the correct field name in your schema
     market.name = getMarketName(marketId);
     market.save();
+    log.info("Market entity created and saved with name: {}", [market.name]);
+  } else {
+    log.info("Market entity already exists with ID: {}", [marketId]);
   }
 }
