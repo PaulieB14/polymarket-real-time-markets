@@ -1,8 +1,8 @@
-specVersion: 1.0.0
+specVersion: 0.0.6
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: CTFExchange
     network: matic
     source:
@@ -11,7 +11,7 @@ dataSources:
       startBlock: 33605403
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.7
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Market
@@ -22,3 +22,5 @@ dataSources:
         - event: TokenRegistered(indexed uint256,indexed uint256,indexed bytes32)
           handler: handleTokenRegistered
       file: ./src/ctf-exchange.ts
+indexerHints:
+  prune: auto
