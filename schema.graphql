@@ -1,5 +1,5 @@
 type Market @entity {
   id: ID! # Unique ID, using the event parameter for token0
   marketId: BigInt! # Original market ID
-  name: String! # Human-readable name
+  name: Bytes! # Human-readable name
 }
