@@ -1,5 +1,6 @@
 type Market @entity {
-  id: ID!
-  marketId: String!
-  name: String!
+  id: ID!  # Unique identifier for the Market entity
+  marketId: String!  # The raw market ID (token0)
+  name: String!  # Human-readable name of the market
+  conditionId: Bytes!  # Additional field from the event data
 }

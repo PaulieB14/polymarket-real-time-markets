@@ -14,11 +14,11 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Market  # Only track the Market entity
+        - Market
       abis:
         - name: CTFExchange
           file: ./abis/CTFExchange.json
       eventHandlers:
         - event: TokenRegistered(indexed uint256,indexed uint256,indexed bytes32)
-          handler: handleTokenRegistered  # Only handle the TokenRegistered event
+          handler: handleTokenRegistered
       file: ./src/ctf-exchange.ts
