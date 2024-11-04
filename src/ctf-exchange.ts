@@ -14,16 +14,25 @@ function getMarketName(marketId: string): string {
 
 // Event handler for TokenRegistered event
 export function handleTokenRegistered(event: TokenRegisteredEvent): void {
-  const marketId = event.params.token0.toString(); // Make sure `token0` is the correct parameter name
-  
-  log.info("Processing TokenRegistered for market ID: {}", [marketId]);
+  // Log to ensure we receive the event
+  log.info("Received TokenRegistered event with transaction hash: {}", [event.transaction.hash.toHex()]);
 
-  // Load or create new Market entity
+  // Check and log each field in the event
+  log.info("TokenRegistered event parameters - token0: {}, complement: {}, conditionId: {}", [
+    event.params.token0.toString(),
+    event.params.complement.toString(),
+    event.params.conditionId.toHexString()
+  ]);
+
+  // Access token0 parameter as a string and use it as the ID
+  const marketId = event.params.token0.toString();
+
+  // Load or create a new Market entity
   let market = Market.load(marketId);
   if (!market) {
     log.info("Creating new Market entity with ID: {}", [marketId]);
     market = new Market(marketId);
-    market.marketId = event.params.token0; // Ensure this is the correct field name in your schema
+    market.marketId = event.params.token0;
     market.name = getMarketName(marketId);
     market.save();
     log.info("Market entity created and saved with name: {}", [market.name]);
