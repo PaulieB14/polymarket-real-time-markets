@@ -24,7 +24,7 @@ export function handleTokenRegistered(event: TokenRegisteredEvent): void {
 
   if (!market) {
     market = new Market(marketId);
-    market.marketId = event.params.token0; // Store as Bytes
+    market.marketId = Bytes.fromHexString(event.params.token0.toHex()); // Convert hex string to Bytes
     market.name = getMarketName(marketId); // Store name as Bytes
     market.conditionId = event.params.conditionId; // Store conditionId as Bytes
     market.save();
