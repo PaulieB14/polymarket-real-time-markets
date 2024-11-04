@@ -1,31 +1,37 @@
 import { TokenRegistered as TokenRegisteredEvent } from "../generated/CTFExchange/CTFExchange";
 import { Market } from "../generated/schema";
-import { Bytes, ByteArray, log } from "@graphprotocol/graph-ts";
+import { Bytes, log } from "@graphprotocol/graph-ts";
 
 // Helper function to define human-readable names for known market IDs
 function getMarketName(marketId: string): Bytes {
-  const names = new Map<string, string>();
-  names.set("100002649754046976236777458421672109661155194998083996335685969219064025530697", "Example Market A");
-  names.set("10000250964337833121513756931256508142748634464847545039606029080452682260353", "Example Market B");
+  const names = new Map<string, Bytes>();
+  names.set(
+    "95694627565725615019234034751263708018078773570114394909580057891995676392551",
+    Bytes.fromUTF8("Example Market A")
+  );
+  names.set(
+    "45701511219602880361246795515729229956843579777723672251724041809672358053949",
+    Bytes.fromUTF8("Example Market B")
+  );
 
-  // Default to "Market [ID]" if not predefined
-  const name = names.get(marketId) || `Market ${marketId.substring(0, 8)}`;
-  return Bytes.fromUTF8(name); // Convert to Bytes
+  return names.get(marketId) || Bytes.fromUTF8(`Market ${marketId.substring(0, 8)}`);
 }
 
 // Event handler for TokenRegistered event
 export function handleTokenRegistered(event: TokenRegisteredEvent): void {
-  const marketId = event.params.token0.toString(); // Use the token ID as string for ID
-
-  // Load or create new Market entity
+  let marketId = event.params.token0.toHex(); // Convert token0 to a hex string for mapping
   let market = Market.load(marketId);
+
   if (!market) {
     market = new Market(marketId);
-    market.marketId = event.params.token0;
-    market.name = getMarketName(marketId);
+    market.marketId = event.params.token0; // Store as Bytes
+    market.name = getMarketName(marketId); // Store name as Bytes
+    market.conditionId = event.params.conditionId; // Store conditionId as Bytes
     market.save();
 
-    // Convert Bytes back to string for logging
-    log.info("Market entity created and saved with name: {}", [market.name.toString()]);
+    log.info("Market entity created with ID: {}, name: {}", [
+      marketId,
+      market.name.toHexString()
+    ]);
   }
 }
