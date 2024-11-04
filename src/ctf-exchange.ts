@@ -17,11 +17,9 @@ export function handleTokenRegistered(event: TokenRegisteredEvent): void {
   // Log to ensure we receive the event
   log.info("Received TokenRegistered event with transaction hash: {}", [event.transaction.hash.toHex()]);
 
-  // Check and log each field in the event
-  log.info("TokenRegistered event parameters - token0: {}, complement: {}, conditionId: {}", [
-    event.params.token0.toString(),
-    event.params.complement.toString(),
-    event.params.conditionId.toHexString()
+  // Check and log the `token0` field in the event
+  log.info("TokenRegistered event parameters - token0: {}", [
+    event.params.token0.toString()
   ]);
 
   // Access token0 parameter as a string and use it as the ID
