@@ -8,7 +8,7 @@ export function handleTokenRegistered(event: TokenRegisteredEvent): void {
   if (!market) {
     // Create a new Market entity if it does not exist
     market = new Market(event.params.token0.toString())
-    market.marketId = event.params.token0
+    market.marketId = event.params.token0.toString()
 
     // Assign a human-readable name (you may replace this with more dynamic logic if available)
     market.name = `Market ${event.params.token0.toString()}`
